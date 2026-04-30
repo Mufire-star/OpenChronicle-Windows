@@ -1,0 +1,67 @@
+[project]
+name = "openchronicle"
+version = "0.1.0"
+description = "Local-first screen-context memory for any LLM agent. Captures accessibility context + screenshots, exposes the result via MCP."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "OpenChronicle contributors" }]
+keywords = ["mcp", "memory", "context", "accessibility", "ax-tree", "agent"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "typer>=0.12",
+    "rich>=13.7",
+    "litellm>=1.52",
+    "python-frontmatter>=1.1",
+    "mss>=9.0",
+    "Pillow>=10.0",
+    "mcp>=1.0",
+    "httpx[socks]>=0.27",
+    "tomli>=2.0; python_version < '3.11'",
+    "pytesseract>=0.3.10",
+    "pyautogui>=0.9.54",
+]
+
+[project.scripts]
+openchronicle = "openchronicle.cli:app"
+
+[project.urls]
+Repository = "https://github.com/openchronicle/openchronicle"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/openchronicle"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"resources/windows-uia-dump.ps1" = "openchronicle/_bundled/windows-uia-dump.ps1"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.6",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
