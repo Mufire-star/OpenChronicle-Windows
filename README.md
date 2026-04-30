@@ -26,6 +26,8 @@
 
 **如果你也觉得 OpenChronicle 的理念很好，但苦于只能在 Mac 上用，这个Windows版本也许就是为你准备的。**
 
+（目前只测试了codex，模型是gpt5.5，mimo-v2.5-pro 还在测试）
+
 ## 这是什么
 
 OpenChronicle Windows 会在本机持续采集你当前工作相关的上下文，整理成多层可检索的数据，通过 MCP 协议暴露给 LLM 客户端：
