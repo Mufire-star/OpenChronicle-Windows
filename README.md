@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="assets/logo.png" alt="OpenChronicle" width="600" />
-</p>
-
 <h1 align="center">OpenChronicle Windows</h1>
 
 <p align="center">
@@ -22,7 +18,7 @@
 
 [OpenChronicle](https://github.com/OpenChronicle) 是一个很棒的本地屏幕记忆系统，但原项目**只支持 macOS**。
 
-日常开发中，我大部分时间在 Windows 上工作，并不使用MAC。于是我把 OpenChronicle 的核心思路移植到了 Windows 平台，利用 **Windows UI Automation** 替代 macOS 的 Accessibility API，同时保留了原项目的数据流水线设计（capture → timeline → session → memory → MCP）。
+在日常开发中，我大部分时间都是在 Windows 上工作，并不使用Mac。于是我把 OpenChronicle 的核心思路移植到了 Windows 平台，利用 **Windows UI Automation** 替代 macOS 的 Accessibility API，同时保留了原项目的数据流水线设计（capture → timeline → session → memory → MCP）。
 
 **如果你也觉得 OpenChronicle 的理念很好，但苦于只能在 Mac 上用，这个Windows版本也许就是为你准备的。**
 
@@ -78,7 +74,7 @@ uv run openchronicle capture-once
 # 后台运行
 uv run openchronicle start
 
-# 前台运行（可查看日志）
+# 前台运行（可查看日志, 但是终端关闭程序结束）
 uv run openchronicle start --foreground
 ```
 
@@ -200,6 +196,7 @@ uv run openchronicle install mcp-json --http
 - 部分 Electron 应用结构较浅，文本可能不完整
 - 提权窗口 / 受保护窗口可能无法采集
 - 逐字输入变化的捕捉稳定性弱于窗口切换事件
+- 可能需要手动修改 `用户名/.openchronicle/config.toml` 里面的url、模型和api
 
 ## 文档
 

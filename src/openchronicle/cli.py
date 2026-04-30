@@ -146,35 +146,48 @@ def _health_status(pid: int | None, last_ts: str | None) -> tuple[str, str]:
     return "stale (no captures in >5m)", "yellow"
 
 
+def _pythonw_exe() -> str:
+    """Return pythonw.exe path if available, otherwise fall back to python.exe."""
+    exe = Path(sys.executable)
+    pythonw = exe.with_name("pythonw.exe")
+    if pythonw.exists():
+        return str(pythonw)
+    return str(exe)
+
+
 def _spawn_background_daemon(*, capture_only: bool) -> int | None:
     """Start the daemon detached from the current terminal."""
-    cmd = [sys.executable, "-m", "openchronicle.cli", "start", "--foreground"]
+    cmd = [_pythonw_exe(), "-m", "openchronicle.cli", "start", "--foreground"]
     if capture_only:
         cmd.append("--capture-only")
 
-    with open(os.devnull, "ab") as devnull:
-        kwargs: dict[str, object] = {
-            "stdin": subprocess.DEVNULL,
-            "stdout": devnull,
-            "stderr": devnull,
-            "cwd": str(Path.cwd()),
-            "close_fds": True,
-        }
-        kwargs["creationflags"] = (
+    startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    startupinfo.wShowWindow = 0  # SW_HIDE
+
+    kwargs: dict[str, object] = {
+        "stdin": subprocess.DEVNULL,
+        "stdout": subprocess.DEVNULL,
+        "stderr": subprocess.DEVNULL,
+        "cwd": str(Path.cwd()),
+        "close_fds": True,
+        "startupinfo": startupinfo,
+        "creationflags": (
             subprocess.DETACHED_PROCESS
             | subprocess.CREATE_NEW_PROCESS_GROUP
             | subprocess.CREATE_NO_WINDOW
-        )
+        ),
+    }
 
-        proc = subprocess.Popen(cmd, **kwargs)
+    proc = subprocess.Popen(cmd, **kwargs)
 
-        for _ in range(50):
-            pid = _read_pid()
-            if pid:
-                return pid
-            if proc.poll() is not None:
-                break
-            time.sleep(0.1)
+    for _ in range(50):
+        pid = _read_pid()
+        if pid:
+            return pid
+        if proc.poll() is not None:
+            break
+        time.sleep(0.1)
 
     return _read_pid()
 

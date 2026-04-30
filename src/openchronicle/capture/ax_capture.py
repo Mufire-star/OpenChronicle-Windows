@@ -126,12 +126,17 @@ class WindowsUIAProvider:
             args.append("-FocusedWindowOnly")
 
         try:
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            startupinfo.wShowWindow = 0  # SW_HIDE
             proc = subprocess.run(
                 args,
                 capture_output=True,
                 text=True,
                 encoding="utf-8",
                 timeout=min(self._timeout + 5, _SUBPROCESS_TIMEOUT),
+                startupinfo=startupinfo,
+                creationflags=subprocess.CREATE_NO_WINDOW,
             )
         except subprocess.TimeoutExpired:
             logger.warning("windows-uia-dump timed out after %ds", min(self._timeout + 5, _SUBPROCESS_TIMEOUT))
