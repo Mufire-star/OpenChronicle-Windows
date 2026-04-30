@@ -22,23 +22,21 @@
 
 [OpenChronicle](https://github.com/OpenChronicle) 是一个很棒的本地屏幕记忆系统，但原项目**只支持 macOS**。
 
-日常开发中，我大部分时间在 Windows 上工作，找不到一个类似的、能让我在 Windows 上获得同等体验的工具。于是我把 OpenChronicle 的核心思路移植到了 Windows 平台，利用 **Windows UI Automation** 替代 macOS 的 Accessibility API，同时保留了原项目的数据流水线设计（capture → timeline → session → memory → MCP）。
+日常开发中，我大部分时间在 Windows 上工作，并不使用MAC。于是我把 OpenChronicle 的核心思路移植到了 Windows 平台，利用 **Windows UI Automation** 替代 macOS 的 Accessibility API，同时保留了原项目的数据流水线设计（capture → timeline → session → memory → MCP）。
 
-这不是简单的代码搬运——Windows 的 UI Automation 机制、窗口管理方式、权限模型都和 macOS 有本质区别，采集层几乎完全重写。
-
-**如果你也觉得 OpenChronicle 的理念很好，但苦于只能在 Mac 上用，这个项目就是为你准备的。**
+**如果你也觉得 OpenChronicle 的理念很好，但苦于只能在 Mac 上用，这个Windows版本也许就是为你准备的。**
 
 ## 这是什么
 
 OpenChronicle Windows 会在本机持续采集你当前工作相关的上下文，整理成多层可检索的数据，通过 MCP 协议暴露给 LLM 客户端：
 
-| 层级 | 说明 |
-|------|------|
+| 层级     | 说明                                       |
+| -------- | ------------------------------------------ |
 | 原始采集 | 窗口信息、可见文本、UI Automation 树、截图 |
-| Timeline | 短时间窗口内的活动摘要 |
-| Session | 更长时间段的工作片段 |
-| Memory | 写入 Markdown 的长期记忆 |
-| MCP 服务 | 供 Codex、Claude、opencode 等客户端读取 |
+| Timeline | 短时间窗口内的活动摘要                     |
+| Session  | 更长时间段的工作片段                       |
+| Memory   | 写入 Markdown 的长期记忆                   |
+| MCP 服务 | 供 Codex、Claude、opencode 等客户端读取    |
 
 它的目标不是替代聊天记录，而是给 Agent 一个可查询的**本地个人记忆层**。
 
@@ -110,6 +108,15 @@ uv run openchronicle install codex
 
 默认注册地址：`http://127.0.0.1:8742/mcp`
 
+如果你想直接使用 Codex CLI 的原生命令，也可以等价注册：
+
+```powershell
+codex mcp add openchronicle --url http://127.0.0.1:8742/mcp
+codex mcp list
+```
+
+如果 Codex 已经在运行，注册后可能需要重启 Codex 或重新打开会话，新的 MCP 工具才会出现在当前会话里。
+
 ### 其他客户端（Claude、opencode 等）
 
 生成通用 MCP 配置文件：
@@ -164,15 +171,15 @@ uv run openchronicle install mcp-json --http
 
 ## 常用命令
 
-| 命令 | 说明 |
-|------|------|
-| `uv run openchronicle capture-once` | 单次采集测试 |
-| `uv run openchronicle timeline tick` | 构建 timeline |
-| `uv run openchronicle timeline list` | 查看 timeline |
-| `uv run openchronicle writer run` | 手动运行 writer |
-| `uv run openchronicle rebuild-index` | 重建记忆索引 |
-| `uv run openchronicle rebuild-captures-index` | 重建采集索引 |
-| `uv run openchronicle config` | 查看当前配置 |
+| 命令                                          | 说明            |
+| --------------------------------------------- | --------------- |
+| `uv run openchronicle capture-once`           | 单次采集测试    |
+| `uv run openchronicle timeline tick`          | 构建 timeline   |
+| `uv run openchronicle timeline list`          | 查看 timeline   |
+| `uv run openchronicle writer run`             | 手动运行 writer |
+| `uv run openchronicle rebuild-index`          | 重建记忆索引    |
+| `uv run openchronicle rebuild-captures-index` | 重建采集索引    |
+| `uv run openchronicle config`                 | 查看当前配置    |
 
 ## 默认数据目录
 

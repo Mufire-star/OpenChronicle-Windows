@@ -132,6 +132,15 @@ uv run openchronicle start
 uv run openchronicle install codex
 ```
 
+这条命令会写入 Codex 的用户级 MCP 配置；等价的 Codex CLI 原生命令是：
+
+```powershell
+codex mcp add openchronicle --url http://127.0.0.1:8742/mcp
+codex mcp list
+```
+
+如果注册前 Codex 已经打开，通常需要重启 Codex 或重新打开会话，当前会话才会重新加载 MCP 列表。
+
 本地 MCP 地址默认是：
 
 ```text

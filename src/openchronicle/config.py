@@ -13,10 +13,10 @@ from . import paths
 
 @dataclass
 class ModelConfig:
-    model: str = "gpt-5.4-nano"
-    base_url: str = ""
+    model: str = "mimo-v2.5-pro"
+    base_url: str = "https://token-plan-cn.xiaomimimo.com/anthropic"
     api_key: str = ""
-    api_key_env: str = "OPENAI_API_KEY"
+    api_key_env: str = "ANTHROPIC_AUTH_TOKEN"
     max_tokens: int | None = None
 
 

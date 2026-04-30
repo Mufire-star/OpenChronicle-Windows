@@ -224,6 +224,8 @@ openchronicle uninstall codex          # remove it
 
 `install` shells out to `codex mcp add openchronicle --url http://127.0.0.1:8742/mcp` (Codex CLI's native streamable-HTTP registration). The entry lands in Codex's user config, which is shared between the Codex CLI and the Codex IDE extension. Re-running is idempotent: an existing `openchronicle` entry is removed and re-registered with the current URL. `uninstall` calls `codex mcp remove openchronicle`; a missing entry is treated as success.
 
+If Codex is already running, restart Codex or open a fresh session after installing. Existing sessions may not reload the MCP server list dynamically. Use `codex mcp list` to verify the entry is enabled.
+
 Requires `codex` on `PATH`. Install from [openai/codex](https://github.com/openai/codex) if needed.
 
 ### opencode

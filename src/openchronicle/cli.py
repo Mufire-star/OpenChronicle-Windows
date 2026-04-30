@@ -589,6 +589,9 @@ def install_codex(
     console.print(
         "  Make sure the daemon is running (`openchronicle start`) so the server is reachable."
     )
+    console.print(
+        "  Restart Codex or open a fresh session if it was already running."
+    )
 
 
 def _opencode_config_path() -> Path:

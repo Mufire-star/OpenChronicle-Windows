@@ -139,6 +139,19 @@ Symptom: Claude Code / Cursor reports the server unreachable.
 
 If `mcp.auto_start = false`, the daemon intentionally won't host a server; use stdio instead.
 
+## Codex probes OAuth endpoints
+
+Symptom: after registering Codex, the daemon log shows requests like:
+
+```text
+GET /.well-known/oauth-authorization-server/mcp HTTP/1.1" 404 Not Found
+GET /mcp/.well-known/oauth-authorization-server HTTP/1.1" 404 Not Found
+```
+
+This is expected when Codex checks whether the MCP server advertises OAuth metadata. OpenChronicle's local MCP endpoint does not use OAuth, so those discovery URLs return 404 and Codex falls back to unauthenticated local MCP. `codex mcp list` should show the entry as `enabled` with `Auth` set to `Unsupported`.
+
+On Windows, a client closing the probe connection can also produce a noisy asyncio line such as `ConnectionResetError: [WinError 10054]`. If `openchronicle status` reports `Health healthy` and the daemon keeps running, this is not a startup failure.
+
 ## ChatGPT Desktop can't see the server
 
 Symptom: you pasted `http://127.0.0.1:8742/mcp` into ChatGPT's Create Connector dialog and got "could not reach server" or "invalid URL."
